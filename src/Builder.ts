@@ -7,7 +7,7 @@ const _builderSymbol = Symbol();
  * been initialized. A builder can be built when all required fields have been
  * initialized, which happens when 'T = S'.
  */
-export type Builder<C, T, S extends Partial<T> = {}> = {
+export type Builder<C, T = C, S extends Partial<T> = {}> = {
     // For each field, we provide a setter of the same name, ensuring that it is
     // not optional. Calling the setter returns a new builder that knows that
     // the corresponding field is initialized via 'S'.
