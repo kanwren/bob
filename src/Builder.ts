@@ -1,14 +1,31 @@
 const _builderSymbol = Symbol();
 
+/**
+ * A 'Builder<C, T, S>' is an object that lets you sequentially build up fields
+ * to construct an object of type 'C'. Type 'T' contains the fields that the
+ * builder should be able to set, and 'S' contains the fields that have already
+ * been initialized. A builder can be built when all required fields have been
+ * initialized, which happens when 'T = S'.
+ */
 export type Builder<C, T, S extends Partial<T> = {}> = {
+    // For each field, we provide a setter of the same name, ensuring that it is
+    // not optional. Calling the setter returns a new builder that knows that
+    // the corresponding field is initialized via 'S'.
     [K in keyof T]-?: (value: T[K]) => Builder<C, T, S & Pick<T, K>>;
 } & {
     build(this: Builder<C, T, T>): C;
-    // Builder has to use 'S', or else the structural checking of ths 'this' above doesn't work
-    // Using a symbol hides this field from code completion
+    // Builder has to use 'S', or else the structural checking of ths 'this'
+    // above doesn't work. Using a symbol hides this field from code completion.
     readonly [_builderSymbol]: S;
 };
 
+/**
+ * Creates a 'Builder' from a template that initializes some fields with default
+ * values. Can optionally take a function as a second argument, specifying what
+ * '.build()' should do with the initialized fields to create the desired type.
+ * For constructing classes, this usually means passing the parameters to the
+ * class's constructor.
+ */
 export function builderDef<T, S extends Partial<T>>(template: S): Builder<T, T, S>;
 export function builderDef<C, T, S extends Partial<T>>(template: S, ctor: (fields: T) => C): Builder<C, T, S>;
 export function builderDef<C, T, S extends Partial<T>>(template: S, ctor?: (fields: T) => C): Builder<C, T, S> {
@@ -34,6 +51,12 @@ export function builderDef<C, T, S extends Partial<T>>(template: S, ctor?: (fiel
     return handler;
 }
 
+/**
+ * Create an empty 'Builder' for a type. Can optionally take a function as a
+ * second argument, specifying what '.build()' should do with the initialized
+ * fields to create the desired type. For constructing classes, this usually
+ * means passing the parameters to the class's constructor.
+ */
 export function builder<T>(): Builder<T, T>;
 export function builder<C, T>(ctor: (fields: T) => C): Builder<C, T>;
 export function builder<C, T>(ctor?: (fields: T) => C): Builder<C, T> {
