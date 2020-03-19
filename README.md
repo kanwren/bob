@@ -1,5 +1,7 @@
 # bob
 
+[![Build Status](https://travis-ci.com/nprindle/bob.svg?branch=master)](https://travis-ci.com/nprindle/bob)
+
 Super typesafe, boilerplate-free builders for TypeScript.
 
 ## Motivation
