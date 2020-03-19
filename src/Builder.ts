@@ -7,14 +7,20 @@ export type Builder<C, T, S extends Partial<T> = {}> = {
     build(this: Builder<C, T, T>): C;
 };
 
-export function builderClassDef<C, T, S extends Partial<T>>(template: S, ctor: (fields: T) => C): Builder<C, T, S> {
+export function builderDef<T, S extends Partial<T>>(template: S): Builder<T, T, S>;
+export function builderDef<C, T, S extends Partial<T>>(template: S, ctor: (fields: T) => C): Builder<C, T, S>;
+export function builderDef<C, T, S extends Partial<T>>(template: S, ctor?: (fields: T) => C): Builder<C, T, S> {
     const base = { ...template };
     const handler = new Proxy(base, {
         // These awful types are fine, because the Proxy doesn't reflect in the
         // types when doing accesses, due to the type assertion
         get(target: any, prop: keyof T): Function {
             if (prop === 'build') {
-                return () => ctor(target);
+                if (ctor) {
+                    return () => ctor(target);
+                } else {
+                    return () => target;
+                }
             } else {
                 return (x: T[typeof prop]): typeof handler => {
                     target[prop] = x;
@@ -26,15 +32,13 @@ export function builderClassDef<C, T, S extends Partial<T>>(template: S, ctor: (
     return handler;
 }
 
-export function builderClass<C, T>(ctor: (fields: T) => C): Builder<C, T> {
-    return builderClassDef<C, T, {}>({}, ctor);
-}
-
-export function builderDef<T, S extends Partial<T>>(template: S): Builder<T, T, S> {
-    return builderClassDef<T, T, S>(template, (x: T) => x);
-}
-
-export function builder<T>(): Builder<T, T> {
-    return builderDef<T, {}>({});
+export function builder<T>(): Builder<T, T>;
+export function builder<C, T>(ctor: (fields: T) => C): Builder<C, T>;
+export function builder<C, T>(ctor?: (fields: T) => C): Builder<C, T> {
+    if (ctor) {
+        return builderDef<C, T, {}>({}, ctor);
+    } else {
+        return builderDef<T, {}>({}) as unknown as Builder<C, T>;
+    }
 }
 

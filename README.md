@@ -162,9 +162,9 @@ const user2 = userBuilder()
     .build();
 ```
 
-To make an instance out of the built fields, use the `builderClass[Def]`
-functions, which let you specify how to construct an instance out of the fields
-you've built:
+To make an instance out of the built fields, `builder` and `builderDef` can
+optionally accept a function as a second argument, which lets you specify how to
+construct an instance out of the fields you've built:
 
 ```typescript
 class User {
@@ -176,7 +176,7 @@ class User {
     // The first type parameter is the result of .build()
     // The second type parameter is the fields that the builder should have
     static builder(): Builder<User, { email: string; id: number; }> {
-        return builderClass(({ email, id }) => new User(email, id));
+        return builder(({ email, id }) => new User(email, id));
     }
 }
 
