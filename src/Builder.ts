@@ -1,10 +1,12 @@
+const _builderSymbol = Symbol();
+
 export type Builder<C, T, S extends Partial<T> = {}> = {
     [K in keyof T]-?: (value: T[K]) => Builder<C, T, S & Pick<T, K>>;
 } & {
-    // For some reason, if I change these types around, when not every required
-    // field has been filled in, the compiler will either not complain at all,
-    // or throw five pages of errors.
     build(this: Builder<C, T, T>): C;
+    // Builder has to use 'S', or else the structural checking of ths 'this' above doesn't work
+    // Using a symbol hides this field from code completion
+    readonly [_builderSymbol]: S;
 };
 
 export function builderDef<T, S extends Partial<T>>(template: S): Builder<T, T, S>;
