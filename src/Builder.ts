@@ -1,4 +1,4 @@
-const _builderSymbol = Symbol();
+const initializedFields = Symbol();
 
 /**
  * A 'Builder<C, T, S>' is an object that lets you sequentially build up fields
@@ -16,7 +16,8 @@ export type Builder<C, T = C, S extends Partial<T> = {}> = {
     build(this: Builder<C, T, T>): C;
     // Builder has to use 'S', or else the structural checking of ths 'this'
     // above doesn't work. Using a symbol hides this field from code completion.
-    readonly [_builderSymbol]: S;
+    // The compiler will report '[initializedFields]' as being incompatible
+    readonly [initializedFields]: S;
 };
 
 /**
