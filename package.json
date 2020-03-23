@@ -5,6 +5,7 @@
   "main": "dist/bob.umd.js",
   "module": "dist/bob.es5.js",
   "types": "dist/types/bob.d.ts",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -35,5 +36,13 @@
   "bugs": {
     "url": "https://github.com/nprindle/bob/issues"
   },
-  "homepage": "https://github.com/nprindle/bob#readme"
+  "homepage": "https://github.com/nprindle/bob#readme",
+  "keywords": [
+    "typescript",
+    "builder",
+    "design patterns",
+    "software design patterns",
+    "oop",
+    "object oriented programming"
+  ]
 }
