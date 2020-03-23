@@ -35,7 +35,7 @@ export function builderDef<C, T, S extends Partial<T>>(template: S, ctor?: (fiel
         // These awful types are fine, because the Proxy doesn't reflect in the
         // types when doing accesses, due to the type assertion
         get(target: any, prop: keyof T): Function {
-            if (prop === 'build') {
+            if (prop === "build") {
                 if (ctor) {
                     return () => ctor(target);
                 } else {
