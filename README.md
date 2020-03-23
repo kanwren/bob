@@ -18,17 +18,17 @@ class UserBuilder {
     private obj: Partial<User> = {};
 
     setEmail(email: string): UserBuilder {
-        obj.email = email;
+        this.obj.email = email;
         return this;
     }
 
     setId(id: number): UserBuilder {
-        obj.id = id;
+        this.obj.id = id;
         return this;
     }
 
     build(): User {
-        return obj as User;
+        return this.obj as User;
     };
 }
 
@@ -62,14 +62,12 @@ class UserBuilder implements Partial<User> {
     email?: string;
     id?: number;
 
-    setEmail(email: string): UserBuilder & Pick<User, "email"> {
-        this.email = email;
-        return this;
+    setEmail(email: string): this & Pick<User, "email"> {
+        return Object.assign(this, { email });
     }
 
-    setId(id: number): UserBuilder & Pick<User, "id"> {
-        this.id = id;
-        return this;
+    setId(id: number): this & Pick<User, "id"> {
+        return Object.assign(this, { id });
     }
 
     build(this: User): User {
