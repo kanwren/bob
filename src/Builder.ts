@@ -13,12 +13,17 @@ export type Builder<C, T = C, S extends Partial<T> = {}> = {
     // The compiler will report '[initializedFields]' as being incompatible
     readonly [initializedFields]: S;
 } & {
+    /**
+     * Produce a completed value from the builder. This is only callable on a
+     * builder when all fields have been filled in; that is, when it is of the
+     * form 'Builder<C, T, T>'.
+     */
     build(this: Builder<C, T, T>): C;
 } & {
     // For each field, we provide a setter of the same name, ensuring that it is
     // not optional. Calling the setter returns a new builder that knows that
     // the corresponding field is initialized via 'S'.
-    [K in keyof T]-?: (value: T[K]) => Builder<C, T, S & Pick<T, K>>
+    [K in keyof T]-?: (value: T[K]) => Builder<C, T, S & Pick<T, K>>;
 };
 
 /**

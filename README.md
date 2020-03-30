@@ -4,9 +4,12 @@
 
 Super typesafe, boilerplate-free builders for TypeScript.
 
+* [Motivation](#motivation)
+* [Usage](#usage)
+
 ## Motivation
 
-Builders are a very useful for declaratively constructing complex objects.
+Builders are very useful for declaratively constructing complex objects:
 
 ```typescript
 type User = {
@@ -148,7 +151,7 @@ To make a builder with default values, use `builderDef`:
 
 ```typescript
 function userBuilder(): Builder<User, { id: number }> {
-    return builder({ id: 0 });
+    return builderDef({ id: 0 });
 }
 
 const user1 = userBuilder()
