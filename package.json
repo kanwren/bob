@@ -1,6 +1,6 @@
 {
   "name": "@nprindle/bob",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Super typesafe, boilerplate-free builders for TypeScript",
   "main": "dist/bob.umd.js",
   "module": "dist/bob.es5.js",
