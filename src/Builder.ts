@@ -8,16 +8,17 @@ const initializedFields = Symbol();
  * initialized, which happens when 'T = S'.
  */
 export type Builder<C, T = C, S extends Partial<T> = {}> = {
-    // For each field, we provide a setter of the same name, ensuring that it is
-    // not optional. Calling the setter returns a new builder that knows that
-    // the corresponding field is initialized via 'S'.
-    [K in keyof T]-?: (value: T[K]) => Builder<C, T, S & Pick<T, K>>;
-} & {
-    build(this: Builder<C, T, T>): C;
     // Builder has to use 'S', or else the structural checking of ths 'this'
     // above doesn't work. Using a symbol hides this field from code completion.
     // The compiler will report '[initializedFields]' as being incompatible
     readonly [initializedFields]: S;
+} & {
+    build(this: Builder<C, T, T>): C;
+} & {
+    // For each field, we provide a setter of the same name, ensuring that it is
+    // not optional. Calling the setter returns a new builder that knows that
+    // the corresponding field is initialized via 'S'.
+    [K in keyof T]-?: (value: T[K]) => Builder<C, T, S & Pick<T, K>>
 };
 
 /**
