@@ -1,4 +1,4 @@
-const initializedFields = Symbol();
+declare const initializedFields: unique symbol;
 
 /**
  * A 'Builder<C, T, S>' is an object that lets you sequentially build up fields
